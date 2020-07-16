@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+{% block title %}jsCoder
+{% endblock title %}
+{% block activehome %}active
+{% endblock activehome %}
+{% block body %}
+{% load static %}
+<link rel="stylesheet" href="{%static 'css/shadow.css'%}">
+<div class="container my-2">
+    <div class="jumbotron text-center bg-primary addshadow" style="color: azure;">
+        <h1 class="display-4" >jsCoder<p class="lead mt-2" id="time"></p></h1>
+        
+        <hr class="my-4">
+        <p>Check our website and get the best solutions for your problems</p>
+        <a class="btn btn-primary btn-lg" href="/blog/" role="button">Goto Blog</a>
+    </div>
+    {% for post in posts %}
+    <div class="card my-4 postsshadow" style="border-radius: 15px;">
+    <h5 class="card-header">Featured</h5>
+    <div class="card-body">
+        <h5 class="card-title">{{post.title}}</h5>
+        <p class="card-text">{{post.content|truncatechars:200}}</p>
+        <a href="/blog/{{post.title}}" class="btn btn-primary">Read more</a>
+    </div>
+    </div>
+    {% endfor %}
+
+</div>
+<br><br><br>
+<script>
+
+    function datetime(){
+    a = new Date()
+    time = ("0"+a.getHours()).slice(-2) + ":" + ("0"+a.getMinutes()).slice(-2) + ":" + ("0"+a.getSeconds()).slice(-2)
+    date = a.toDateString()
+    document.getElementById('time').innerHTML = time+"<br>"+date
+    }
+    setInterval(datetime,1000); 
+</script>
+{% endblock body %}

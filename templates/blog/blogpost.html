@@ -1,0 +1,80 @@
+{% extends 'base.html' %}
+{% block title %}{{post.title}} | jscoder
+{% endblock title %}
+{% block activeblog %}active
+{% endblock activeblog %}
+
+{% block body   %}
+{% load static %}
+{% load humanize %}
+{% load extras %}
+<div class="container">
+    <div class="card my-4" style="border-radius: 15px;">
+        <h1 class="card-header">{{post.title}}<div>
+                <h5>
+                    <font size='2px'>Uploaded on {{post.date}}</font>
+                </h5>
+            </div>
+        </h1>
+        <div class="card-body">
+            <p class="card-text">{{post.content}}</p>
+        </div>
+    </div>
+    <h1>Comments ({{comments.count}})</h1>
+    {% if user.is_authenticated %}
+    <form method="POST" action="/blog/PostComment/">{% csrf_token %}
+        <div class="form-group">
+            <label for="exampleInputEmail1"></label>
+            <input type="text" required class="form-control" name="comment" aria-describedby="emailHelp"
+                placeholder="Add comment">
+            <input type="hidden" name="post" value="{{post.id}}">
+            <input type="hidden" name="parentpost" value="">
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+    {% else %}
+    <p>Please signup and login to post a comment</p>
+    {% endif %}
+    {% for i in comments %}
+    <div class="row my-4 mx-0" style="border-bottom: 1px solid;overflow-wrap: break-word;">
+        <div class="col-md-1"><img src="{%static 'img/user.jpg'%}" height="50px" width="50px"
+                style="border-radius: 100%;"></div>
+        <div class="col-md-11"><b>{{i.user.username}}</b> - {{i.time|naturaltime}}<p>{{i.comments}}</p>
+            <div class="reply mx-0 my-0">
+                {% if user.is_authenticated %}
+                <button class="btn-sm btn-primary my-2" type="button" data-toggle="collapse"
+                    data-target="#replybox{{i.pk}}" aria-expanded="false" aria-controls="collapseExampl">
+                    Reply
+                </button>
+                </p>
+                <div class="collapse my-3" id="replybox{{i.pk}}">
+                    <!-- <div class="card card-body"> -->
+                    <form method="POST" action="/blog/PostComment/" style="margin-top: -4vh;">{% csrf_token %}
+                        <div class="form-group">
+                            <label for="exampleInputEmail1"></label>
+                            <input type="text" required class="form-control" name="comment" aria-describedby="emailHelp"
+                                placeholder="Add reply">
+                            <input type="hidden" name="post" value="{{post.id}}">
+                            <input type="hidden" name="parentpost" value="{{i.pk}}">
+                        </div>
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </form>
+                    <!-- </div> -->
+                </div>
+                {% endif %}
+                {% for reply in replies|dict_val:i.pk %}
+                {% comment %} <b>{{reply.user.username}}</b> - {{reply.time|naturaltime}}<p>{{reply.comments}}</p> {% endcomment %}
+                <div class="row my-2">
+                <div class="col-md-1"><img src="{%static 'img/user.jpg'%}" height="50px" width="50px"
+                style="border-radius: 100%;"></div>
+        <div class="col-md-11"><b>{{reply.user.username}}</b> - {{reply.time|naturaltime}}<p>{{reply.comments}}</p></div>
+        </div>
+                    {% endfor %}
+                </div>
+
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    <br><br><br>
+    {% endblock body   %}

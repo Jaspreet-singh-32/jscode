@@ -1,0 +1,4 @@
+.addshadow{box-shadow: 2px 2px 10px black;}
+    .postsshadow:hover{
+        box-shadow: 1px 1px 10px black;
+    }

@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% block title %}jscoder | Blog | Home
+{% endblock title %}
+{% block activeblog %}active
+{% endblock activeblog %}
+{% block body %} 
+{% load static %}
+<link rel="stylesheet" href="{%static 'css/shadow.css'%}">
+<div class="container">
+{% if posts.count%}
+<h1>Related posts ({{posts.count}})</h1>
+{% else %}
+<h1>Check other posts</h1>
+{% endif %}
+    {% for post in posts %}
+    <div class="card my-4 postsshadow" style="border-radius: 15px;">
+    <h5 class="card-header">{{post.title}}</h5>
+    <div class="card-body">
+        {% comment %} <h5 class="card-title">{{post.title}}</h5> {% endcomment %}
+        <p class="card-text">{{post.content|truncatechars:200}}</p>
+        <a href="/blog/{{post.title}}" class="btn btn-primary">Read more</a>
+    </div>
+    </div>
+    {% endfor %}
+
+</div>
+{% endblock body %} 
