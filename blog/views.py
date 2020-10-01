@@ -3,11 +3,14 @@ from blog.models import Post,Comment
 # Create your views here.
 from blog.templatetags import extras
 def bloghome(request):
+    
     posts = Post.objects.all()[::-1]
+    print(posts)
     param = {'posts':posts}
     return render(request,'blog/bloghome.html',param)
 def blodpost(request,slug):
     post = Post.objects.get(title=slug)
+    print(post)
     comment = Comment.objects.filter(post=post,parent=None)
     reply = Comment.objects.filter(post=post).exclude(parent=None)
     replydict = {}
@@ -22,6 +25,7 @@ def blodpost(request,slug):
 def PostComment(request):
     if request.method == 'POST':
         comment = request.POST.get('comment')
+        print(comment)
         parentpost = request.POST.get('parentpost')
         post = Post.objects.get(id=request.POST.get('post')) 
         print(parentpost)   
